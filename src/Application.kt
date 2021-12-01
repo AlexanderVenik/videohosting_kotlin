@@ -10,12 +10,12 @@ import io.ktor.server.netty.Netty
 fun main() {
     // ENV VAR
     val dotenv = dotenv()
-    val PORT = dotenv["PORT"].toInt()
-    val HOST = dotenv["HOST"]
+    val port = dotenv["PORT"].toInt()
+    val host = dotenv["HOST"]
 
-    embeddedServer(Netty, port = PORT, host = HOST) {
+    embeddedServer(Netty, port = port, host = host) {
         configureRouting()
-        StaticContent()
+        Index()
         install(Mustache) {
             mustacheFactory = DefaultMustacheFactory("templates")
         }

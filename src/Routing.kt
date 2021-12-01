@@ -13,13 +13,6 @@ data class User(val id: Int, val name: String)
 
 fun Application.configureRouting() {
     routing {
-        route("/index")
-        {
-            get{
-                val sampleUser = User(1, "John")
-                call.respond(MustacheContent("index.hbs", mapOf("user" to sampleUser)))
-            }
-        }
         get("/") {
             call.respondText("Hello World kotlin!")
         }
@@ -28,19 +21,21 @@ fun Application.configureRouting() {
                 val html = File("./static/index.html").readText()
                 call.respondText(html, ContentType.Text.Html)
             }
-            catch(e: Exception){
-                val err = e.message.toString()
+            catch(exception: Exception){
+                val err = exception.message.toString()
                 call.respondText(err)
             }
         }
-
     }
 }
 
-fun Application.StaticContent() {
+fun Application.Index() {
     routing {
-        static("static") {
-            file("index.html")
+        route("/index") {
+            get{
+                val sampleUser = User(1, "John")
+                call.respond(MustacheContent("index.hbs", mapOf("user" to sampleUser)))
+            }
         }
     }
 }
