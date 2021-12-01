@@ -13,9 +13,12 @@ data class User(val id: Int, val name: String)
 
 fun Application.configureRouting() {
     routing {
-        route("/")
+        route("/index")
         {
-
+            get{
+                val sampleUser = User(1, "John")
+                call.respond(MustacheContent("index.hbs", mapOf("user" to sampleUser)))
+            }
         }
         get("/") {
             call.respondText("Hello World kotlin!")
@@ -30,10 +33,7 @@ fun Application.configureRouting() {
                 call.respondText(err)
             }
         }
-        get("/index") {
-            val sampleUser = User(1, "John")
-            call.respond(MustacheContent("index.hbs", mapOf("user" to sampleUser)))
-        }
+
     }
 }
 

@@ -1,14 +1,19 @@
 package com.example
 
 import com.github.mustachejava.DefaultMustacheFactory
+import io.github.cdimascio.dotenv.dotenv
 import io.ktor.application.install
+import io.ktor.mustache.Mustache
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import io.ktor.features.*
-import io.ktor.mustache.*
 
 fun main() {
-    embeddedServer(Netty, port = 4587, host = "0.0.0.0") {
+    // ENV VAR
+    val dotenv = dotenv()
+    val PORT = dotenv["PORT"].toInt()
+    val HOST = dotenv["HOST"]
+
+    embeddedServer(Netty, port = PORT, host = HOST) {
         configureRouting()
         StaticContent()
         install(Mustache) {
@@ -16,4 +21,5 @@ fun main() {
         }
     }.start(wait = true)
 }
+
 
