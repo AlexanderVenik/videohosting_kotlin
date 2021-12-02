@@ -14,7 +14,7 @@ fun main() {
     val host = dotenv["HOST"]
 
     embeddedServer(Netty, port = port, host = host) {
-        configureRouting()
+        СonfigureRouting()
         Index()
         install(Mustache) {
             mustacheFactory = DefaultMustacheFactory("templates")

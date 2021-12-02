@@ -3,15 +3,18 @@ package com.example
 import io.ktor.routing.*
 import io.ktor.http.*
 import io.ktor.application.*
-import io.ktor.http.content.file
-import io.ktor.http.content.static
 import io.ktor.mustache.MustacheContent
 import io.ktor.response.*
 import java.io.File
 
-data class User(val id: Int, val name: String)
+import com.example.Models.User
+import com.example.Database.Database
+import io.github.cdimascio.dotenv.dotenv
 
-fun Application.configureRouting() {
+// ENV VAR
+val dotenv = dotenv()
+
+fun Application.СonfigureRouting() {
     routing {
         get("/") {
             call.respondText("Hello World kotlin!")
@@ -33,8 +36,26 @@ fun Application.Index() {
     routing {
         route("/index") {
             get{
-                val sampleUser = User(1, "John")
-                call.respond(MustacheContent("index.hbs", mapOf("user" to sampleUser)))
+                // Переменные окружения для подк. бд
+                val l_dbUrl = dotenv["DB_URL"]
+                val l_dbUser = dotenv["DB_USER"]
+                val l_dbPassword = dotenv["DB_PASSWORD"]
+
+                // Подключение к бд
+                val statusConnectDB = Database.Builder()
+                    .Url(l_dbUrl)
+                    .User(l_dbUser)
+                    .Password(l_dbPassword)
+                    .Connection()
+
+                if(statusConnectDB)
+                {
+                    val sampleUser = User(1, "John", 20, "Script", "Govno")
+                    call.respond(MustacheContent(
+                        "index.hbs",
+                        mapOf("user" to sampleUser))
+                    )
+                }
             }
         }
     }
